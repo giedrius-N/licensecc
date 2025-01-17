@@ -107,6 +107,10 @@ enum LCC_API_HW_IDENTIFICATION_STRATEGY {
 	* Not yet implemented
 	*/
 	STRATEGY_HOST_NAME = 4,
+	/*
+	* Strategy to use motherboard Serial number on Windows and disk Serial number on Linux OS
+	*/
+	STRATEGY_MOTHERBOARD_DISK = 5,
 	STRATEGY_NONE = -2
 };
 
