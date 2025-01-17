@@ -5,6 +5,8 @@ target_link_libraries(lccinspector
      licensecc_static
      Boost::unit_test_framework 
      Boost::filesystem
-     Boost::system)
+     Boost::system
+     lfreist-hwinfo::hwinfo
+)
 
 install(TARGETS lccinspector RUNTIME DESTINATION bin/${LCC_PROJECT_NAME})

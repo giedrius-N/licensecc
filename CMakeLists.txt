@@ -132,6 +132,8 @@ message( STATUS "Project base dir    : " ${LCC_PROJECTS_BASE_DIR}/${LCC_PROJECT_
 
 add_subdirectory(src)
 
+add_subdirectory(extern/hwinfo)
+
 #boost is required only for tests
 #bug in cmake win32 - can't find boost compiled with mingw 
 if(WIN32 AND "x${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}" STREQUAL "x")

@@ -13,11 +13,16 @@
 #include "../library/os/dmi_info.hpp"
 #include "../library/os/network.hpp"
 
+#include "hwinfo/hwinfo.h"
+
 using namespace std;
 using namespace license::os;
 
-const map<int, string> stringByStrategyId = {
-	{STRATEGY_DEFAULT, "DEFAULT"}, {STRATEGY_ETHERNET, "MAC"}, {STRATEGY_IP_ADDRESS, "IP"}, {STRATEGY_DISK, "Disk"}};
+const map<int, string> stringByStrategyId = {{STRATEGY_DEFAULT, "DEFAULT"},
+											 {STRATEGY_ETHERNET, "MAC"},
+											 {STRATEGY_IP_ADDRESS, "IP"},
+											 {STRATEGY_DISK, "Disk"},
+											 {STRATEGY_MOTHERBOARD_DISK, "Motherboard_disk"}};
 
 const unordered_map<int, string> descByVirtDetail = {{BARE_TO_METAL, "No virtualization"},
 													 {VMWARE, "Vmware"},
