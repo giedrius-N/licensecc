@@ -17,9 +17,10 @@ namespace hw_identifier {
 static array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> generate_id_by_motherboard_sn(const std::string& sn) {
 	array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> id_array = {};
 
-	size_t size_to_copy = min(HW_IDENTIFIER_PROPRIETARY_DATA, sn.size());
-
-	memcpy(id_array.data(), sn.data(), size_to_copy);
+	for (size_t i = 0; i < sn.size(); ++i) {
+		id_array[i % HW_IDENTIFIER_PROPRIETARY_DATA] +=
+			static_cast<uint8_t>((static_cast<uint16_t>(sn[i]) * (i + 1)) & 0xFF);
+	}
 
 	return id_array;
 }
