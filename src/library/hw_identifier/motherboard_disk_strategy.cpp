@@ -11,35 +11,56 @@
 
 using namespace std;
 
+static constexpr uint32_t FNV_PRIME_32 = 16777619u;
+static constexpr uint32_t FNV_OFFSET_BASIS_32 = 2166136261u;
+
 namespace license {
 namespace hw_identifier {
 
-static array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> generate_id_by_motherboard_sn(const std::string& sn) {
-	array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> id_array = {};
+static uint32_t fnv1a_32(const std::string& data) { 
+	uint32_t hash = FNV_OFFSET_BASIS_32; 
+	for (unsigned char c : data) {
+		hash ^= c;
+		hash *= FNV_PRIME_32;
+	}
 
-	for (size_t i = 0; i < sn.size(); ++i) {
-		id_array[i % HW_IDENTIFIER_PROPRIETARY_DATA] +=
-			static_cast<uint8_t>((static_cast<uint16_t>(sn[i]) * (i + 1)) & 0xFF);
+	return hash;
+}
+
+static array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> generate_id_by_sn(const std::string& sn) {
+	array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> id_array = {};
+	uint32_t hash = fnv1a_32(sn);
+
+	for (size_t i = 0; i < HW_IDENTIFIER_PROPRIETARY_DATA; ++i) {
+		uint8_t byteVal = static_cast<uint8_t>((hash >> (8 * (i % 4))) & 0xFF);
+		id_array[i] = static_cast<uint8_t>(byteVal ^ static_cast<uint8_t>(i));
 	}
 
 	return id_array;
 }
 
-static FUNCTION_RETURN generate_disk_pc_id(vector<array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA>> &v_disk_id) {
-	return FUNC_RET_OK;
-}
-
-static FUNCTION_RETURN generate_motherboard_pc_id(vector<array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA>> &v_motherboard_id) {
+static FUNCTION_RETURN generate_motherboard_pc_id(vector<array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA>> &v_motherboard_id) {	
 	hwinfo::MainBoard main_board;
 	std::string sn = main_board.serialNumber();
 
-	array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA> motherboard_id = generate_id_by_motherboard_sn(sn);
+	v_motherboard_id.emplace_back(generate_id_by_sn(sn));
 
-	if (!motherboard_id.empty()) {
-		v_motherboard_id.push_back(motherboard_id);
+	if (v_motherboard_id.back().empty()) {
+		v_motherboard_id.pop_back();
 	}
 
 	return v_motherboard_id.size() > 0 ? FUNC_RET_OK : FUNC_RET_NOT_AVAIL;
+}
+
+
+static FUNCTION_RETURN generate_disk_pc_id(vector<array<uint8_t, HW_IDENTIFIER_PROPRIETARY_DATA>> &v_disk_id) {
+	vector<hwinfo::Disk> disks = hwinfo::getAllDisks();
+
+	for (size_t i = 0; i < disks.size(); i++) {
+		v_disk_id.emplace_back(generate_id_by_sn(disks[i].serialNumber()));
+	}
+
+	return v_disk_id.size() > 0 ? FUNC_RET_OK : FUNC_RET_NOT_AVAIL;
 }
 
 LCC_API_HW_IDENTIFICATION_STRATEGY MotherboardDiskStrategy::identification_strategy() const {
@@ -59,9 +80,7 @@ vector<HwIdentifier> MotherboardDiskStrategy::alternative_ids() const {
 #endif
 
 #ifdef linux
-
-
-
+	result = generate_disk_pc_id(data);
 #endif
 	
 	if (result == FUNC_RET_OK) {
