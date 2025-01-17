@@ -21,6 +21,25 @@ If you're experiencing problems, or you just need informations you can't find in
 
 Remember to show your appreciation giving us a <a class="github-button" href="https://github.com/open-license-manager/licensecc" data-icon="octicon-star" aria-label="Star open-license-manager/licensecc on GitHub">star</a> here on GitHub.
 
+## Additional Features in This Fork
+This fork introduces a new cross-platform licensing strategy based on **motherboard and disk information**, using the [HWInfo](https://github.com/lfreist/hwinfo) library for hardware identification.
+
+#### Key Enhancements
+- **Motherboard and Disk-Based Licensing**: Generates hardware signatures based on motherboard and disk properties, providing stronger protection against virtualization and hardware tampering.
+- **Cross-Platform Compatibility**: On Windows, the motherboard (mainboard) serial number is used for identification, while on Linux, the disk serial number is utilized.
+- **Minimal Impact on Existing Functionality**: Integrated into the `licensecc` library with minimal disruption to existing features.
+
+#### How to Use
+* Clone the repository with the `--recursive` flag to include the `hwinfo` submodule:
+   ```bash
+   git clone --recursive https://github.com/giedrius-N/licensecc.git
+   ```
+* Refer to the example `motherboard_disk_strategy.cpp` for implementation details.
+
+#### How This Differs From the Original Repository
+- Adds a new licensing strategy based on motherboard and disk properties.
+- Enhances hardware signature robustness for cross-platform environments.
+
 ## License
 The project is donated to the community. It comes with freedom of use for everyone, and it always will be. 
 It has a [BSD 3 clauses](https://opensource.org/licenses/BSD-3-Clause) licensing schema, that allows free modification and use in commercial software. 
