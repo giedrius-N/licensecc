@@ -3,3 +3,6 @@
 	url = https://github.com/open-license-manager/lcc-license-generator.git
 	branch = .
 	ignore = all
+[submodule "extern/hwinfo"]
+	path = extern/hwinfo
+	url = https://github.com/lfreist/hwinfo.git
