@@ -14,6 +14,10 @@ ADD_LIBRARY(licensecc_static STATIC
     $<TARGET_OBJECTS:base>
 )
 
+target_link_libraries(licensecc_static PRIVATE lfreist-hwinfo::hwinfo)
+
+set_property(TARGET licensecc_static PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 if(CODE_COVERAGE AND UNIX)
 	  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
 	    target_link_options(licensecc_static PUBLIC --coverage)
