@@ -23,7 +23,7 @@ project (licensecc
 			LANGUAGES CXX)
 set(PROJECT_DESCRIPTION "Copy protection and licensing library")
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
@@ -131,6 +131,16 @@ message( STATUS "Project name        : " ${LCC_PROJECT_NAME} )
 message( STATUS "Project base dir    : " ${LCC_PROJECTS_BASE_DIR}/${LCC_PROJECT_NAME} )
 
 add_subdirectory(src)
+
+add_subdirectory(extern/hwinfo)
+
+install(TARGETS hwinfo hwinfo_battery hwinfo_cpu hwinfo_disk hwinfo_gpu hwinfo_mainboard hwinfo_os hwinfo_ram hwinfo_network
+    EXPORT hwinfo_export
+    ARCHIVE DESTINATION ${main_lib_dest}/hwinfo
+    LIBRARY DESTINATION ${main_lib_dest}/hwinfo
+    RUNTIME DESTINATION ${main_lib_dest}/hwinfo)
+export(EXPORT hwinfo_export NAMESPACE lfreist-hwinfo:: FILE ${CMAKE_BINARY_DIR}/hwinfo.cmake)
+
 
 #boost is required only for tests
 #bug in cmake win32 - can't find boost compiled with mingw 
