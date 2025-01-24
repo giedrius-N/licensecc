@@ -40,6 +40,10 @@ This fork introduces a new cross-platform licensing strategy based on **motherbo
 - Adds a new licensing strategy based on motherboard and disk properties.
 - Enhances hardware signature robustness for cross-platform environments.
 
+## Linking to other projects
+
+[More about linking to other projects](src/library/hw_identifier/README.md)
+
 ## License
 The project is donated to the community. It comes with freedom of use for everyone, and it always will be. 
 It has a [BSD 3 clauses](https://opensource.org/licenses/BSD-3-Clause) licensing schema, that allows free modification and use in commercial software. 
